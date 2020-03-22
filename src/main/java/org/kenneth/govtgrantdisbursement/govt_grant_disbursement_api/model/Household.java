@@ -1,10 +1,13 @@
 package org.kenneth.govtgrantdisbursement.govt_grant_disbursement_api.model;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -18,14 +21,14 @@ public class Household {
 	@Column(name="housing_type")
 	private String housingType;
 	
+	@OneToMany(mappedBy="household")
+	private Set<Person> people;
+	
 	public Household() {
 	}
-	
-	public Household(Long id, String housingType) {
-		this.id = id;
+	public Household(String housingType) {
 		this.housingType = housingType;
 	}
-	
 	public Long getId() {
 		return id;
 	}
@@ -37,5 +40,11 @@ public class Household {
 	}
 	public void setHousingType(String housingType) {
 		this.housingType = housingType;
+	}
+	public Set<Person> getPeople() {
+		return people;
+	}
+	public void setPeople(Set<Person> people) {
+		this.people = people;
 	}
 }
