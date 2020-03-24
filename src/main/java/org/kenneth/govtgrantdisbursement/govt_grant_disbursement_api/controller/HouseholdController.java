@@ -1,11 +1,19 @@
 package org.kenneth.govtgrantdisbursement.govt_grant_disbursement_api.controller;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.kenneth.govtgrantdisbursement.govt_grant_disbursement_api.model.Household;
+import org.kenneth.govtgrantdisbursement.govt_grant_disbursement_api.model.Person;
 import org.kenneth.govtgrantdisbursement.govt_grant_disbursement_api.service.IHouseholdService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -14,8 +22,39 @@ public class HouseholdController {
 	@Autowired
 	private IHouseholdService householdService;
 	
-	@GetMapping("/listHouseholds")
+	@GetMapping("/households")
 	public List<Household> listHouseholds() {
 		return householdService.listAll();
+	}
+	
+	@GetMapping("/households/{id}")
+	public ResponseEntity<Household> getHousehold(@PathVariable Long id) {
+		try {
+			Household household = householdService.get(id);
+			return new ResponseEntity<Household> (household, HttpStatus.OK);
+			
+		} catch (NoSuchElementException e) {
+			return new ResponseEntity<Household> (HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@PostMapping("/households")
+	public void addHousehold(@RequestBody Household household) {
+		householdService.save(household);
+	}
+	
+	@PostMapping("/households/{householdId}")
+	public void addPersonToHousehold(@RequestBody Person person, @PathVariable Long householdId) {
+		householdService.addPersonToHousehold(householdId, person);
+	}
+	
+	@DeleteMapping("/households/{id}")
+	public void deleteHousehold(@PathVariable Long id) {
+		householdService.delete(id);
+	}
+	
+	@DeleteMapping("/people/{id}")
+	public void removePersonFromHousehold(@PathVariable Long id) {
+		householdService.removePersonFromHousehold(id);
 	}
 }

@@ -2,6 +2,7 @@ package org.kenneth.govtgrantdisbursement.govt_grant_disbursement_api.model;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,18 +11,25 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name="households")
 public class Household {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	@Column(name="housing_type")
 	private String housingType;
 	
-	@OneToMany(mappedBy="household")
+	@JsonManagedReference
+	@OneToMany(
+			mappedBy="household",
+			cascade=CascadeType.ALL,
+			orphanRemoval=true
+	)
 	private Set<Person> people;
 	
 	public Household() {
