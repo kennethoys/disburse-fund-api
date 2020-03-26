@@ -24,18 +24,23 @@ public class HouseholdController {
 	
 	@GetMapping("/households")
 	public List<Household> listHouseholds() {
-		return householdService.listAll();
+		return householdService.listAllHousehold();
 	}
 	
 	@GetMapping("/households/{id}")
 	public ResponseEntity<Household> getHousehold(@PathVariable Long id) {
 		try {
-			Household household = householdService.get(id);
+			Household household = householdService.getHousehold(id);
 			return new ResponseEntity<Household> (household, HttpStatus.OK);
 			
 		} catch (NoSuchElementException e) {
 			return new ResponseEntity<Household> (HttpStatus.NOT_FOUND);
 		}
+	}
+	
+	@GetMapping("/households/grants/{id}")
+	public List<Household> getGrants(@PathVariable int option) {
+		return householdService.getGrantDisbursement(option);
 	}
 	
 	@PostMapping("/households")
@@ -50,7 +55,7 @@ public class HouseholdController {
 	
 	@DeleteMapping("/households/{id}")
 	public void deleteHousehold(@PathVariable Long id) {
-		householdService.delete(id);
+		householdService.deleteHousehold(id);
 	}
 	
 	@DeleteMapping("/people/{id}")

@@ -1,10 +1,12 @@
 package org.kenneth.govtgrantdisbursement.govt_grant_disbursement_api.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,6 +28,7 @@ public class Household {
 	
 	@JsonManagedReference
 	@OneToMany(
+			fetch = FetchType.EAGER,
 			mappedBy="household",
 			cascade=CascadeType.ALL,
 			orphanRemoval=true
@@ -33,9 +36,11 @@ public class Household {
 	private Set<Person> people;
 	
 	public Household() {
+		people = new HashSet<Person> ();
 	}
 	public Household(String housingType) {
 		this.housingType = housingType;
+		people = new HashSet<Person> ();
 	}
 	public Long getId() {
 		return id;

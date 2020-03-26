@@ -6,9 +6,10 @@ import java.time.Period;
 public class DateUtil {
 	
 	public static int calculateAge(LocalDate birthDate, LocalDate currentDate) {
-		if ((birthDate != null) && (currentDate != null)) {
+		if((birthDate != null) && (currentDate != null)) {
             return Period.between(birthDate, currentDate).getYears();
-        } else {
+        } 
+		else {
             return 0;
         }
 	}

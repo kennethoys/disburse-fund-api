@@ -1,6 +1,7 @@
 package org.kenneth.govtgrantdisbursement.govt_grant_disbursement_api.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -22,24 +23,40 @@ public class HouseholdService {
 	@Autowired
 	private PersonRepository personRepository;
 	
-	public List<Household> listAll() {
+	public List<Household> listAllHousehold() {
 		return (List<Household>) householdRepository.findAll();
+	}
+	
+	public List<Person> listAllPeople() {
+		return (List<Person>) personRepository.findAll();
 	}
 	
 	public void save(Household household) {
 		householdRepository.save(household);
 	}
 	
-	public Household get(Long id) {
+	public void save(Person person) {
+		personRepository.save(person);
+	}
+	
+	public Household getHousehold(Long id) {
 		return householdRepository.findById(id).get();
 	}
 	
-	public void delete(Long id) {
+	public Person getPerson(Long id) {
+		return personRepository.findById(id).get();
+	}
+	
+	public void deleteHousehold(Long id) {
 		householdRepository.deleteById(id);
 	}
 	
+	public void deletePerson(Long id) {
+		personRepository.deleteById(id);
+	}
+	
 	public void addPersonToHousehold(Long householdId, Person person) {
-		Household household = get(householdId);
+		Household household = getHousehold(householdId);
 		person.setHousehold(household);
 		personRepository.save(person);
 	}
@@ -50,9 +67,26 @@ public class HouseholdService {
 		save(household);
 	}
 	
+	public List<Household> getGrantDisbursement(int option) {
+		switch(option) {
+			case 1:
+				return getSEB();
+			case 2:
+				return getFTS();
+			case 3:
+				return getEB();
+			case 4:
+				return getBSG();
+			case 5:
+				return getYGSTG();
+			default:
+				return new ArrayList<Household> ();
+		}
+	}
+	
 	// Student Encouragement Bonus
-	public List<Household> getSEB() {
-		return listAll().stream().filter(household -> {
+	private List<Household> getSEB() {
+		return listAllHousehold().stream().filter(household -> {
 			Set<Person> people = household.getPeople();
 			int totalIncome = 0;
 			boolean lessThan16 = false;
@@ -72,8 +106,8 @@ public class HouseholdService {
 	}
 	
 	// Family Togetherness Scheme
-	public List<Household> getFTS() {
-		return listAll().stream().filter(household -> {
+	private List<Household> getFTS() {
+		return listAllHousehold().stream().filter(household -> {
 			Set<Person> people = household.getPeople();
 			boolean hasCouple = false;
 			boolean hasChildrenBelow18 = false;
@@ -98,8 +132,8 @@ public class HouseholdService {
 	}
 	
 	// Elder Bonus
-	public List<Household> getEB() {
-		return listAll().stream().filter(household -> {
+	private List<Household> getEB() {
+		return listAllHousehold().stream().filter(household -> {
 			Set<Person> people = household.getPeople();
 			boolean hasElderAbove50 = false;
 			
@@ -117,8 +151,8 @@ public class HouseholdService {
 	}
 	
 	// Baby Sunshine Grant
-	public List<Household> getBSG() {
-		return listAll().stream().filter(household -> {
+	private List<Household> getBSG() {
+		return listAllHousehold().stream().filter(household -> {
 			Set<Person> people = household.getPeople();
 			boolean hasChildrenYoungerThan5 = false;
 			
@@ -136,8 +170,8 @@ public class HouseholdService {
 	}
 	
 	// YOLO GST Grant
-	public List<Household> getYGSTG() {
-		return listAll().stream().filter(household -> {
+	private List<Household> getYGSTG() {
+		return listAllHousehold().stream().filter(household -> {
 			Set<Person> people = household.getPeople();
 			int totalIncome = 0;
 			
