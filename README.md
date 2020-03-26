@@ -56,3 +56,6 @@ Import project as maven project
 Double click on App.java and run to run application
 
 Double click on HouseholdGrantTest.java/HouseholdIntegrationTest to run test
+
+## Architecture
+![Alt text](SimpleArchitecture.png)
