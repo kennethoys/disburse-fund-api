@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name="people")
@@ -39,6 +40,7 @@ public class Person {
 	@Column(name="birth_date")
 	private LocalDate birthDate;
 	
+	@JsonBackReference
 	@OneToOne(cascade=CascadeType.ALL)
 	private Person spouse;
 	

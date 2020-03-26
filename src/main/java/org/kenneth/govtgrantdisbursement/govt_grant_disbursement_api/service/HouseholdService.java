@@ -3,7 +3,6 @@ package org.kenneth.govtgrantdisbursement.govt_grant_disbursement_api.service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.kenneth.govtgrantdisbursement.govt_grant_disbursement_api.model.Household;
@@ -87,28 +86,34 @@ public class HouseholdService {
 	// Student Encouragement Bonus
 	private List<Household> getSEB() {
 		return listAllHousehold().stream().filter(household -> {
-			Set<Person> people = household.getPeople();
+			List<Person> people = household.getPeople().stream().collect(Collectors.toList());
+			List<Person> peopleToRemove = new ArrayList<Person> ();
+			
 			int totalIncome = 0;
-			boolean lessThan16 = false;
+			boolean hasLessThan16 = false;
 			
 			for(Person person: people) {
 				totalIncome += person.getAnnualIncome();
 				
 				if(DateUtil.calculateAge(person.getBirthDate(), LocalDate.now()) < 16)
-					lessThan16 = true;
+					hasLessThan16 = true;
 				
 				else
-					people.remove(person);
+					peopleToRemove.add(person);
 			}
 			
-			return totalIncome < 150000 && lessThan16;
+			people.removeAll(peopleToRemove);
+			household.setPeople(people.stream().collect(Collectors.toSet()));
+			return totalIncome < 150000 && hasLessThan16;
 		}).collect(Collectors.toList());
 	}
 	
 	// Family Togetherness Scheme
 	private List<Household> getFTS() {
 		return listAllHousehold().stream().filter(household -> {
-			Set<Person> people = household.getPeople();
+			List<Person> people = household.getPeople().stream().collect(Collectors.toList());
+			List<Person> peopleToRemove = new ArrayList<Person> ();
+			
 			boolean hasCouple = false;
 			boolean hasChildrenBelow18 = false;
 			
@@ -119,14 +124,17 @@ public class HouseholdService {
 				}
 				else {
 					
-					if(person.getSpouse().getHousehold().equals(person.getHousehold()))
-						hasCouple = true;
+					if(person.getSpouse() != null)
+						if(person.getSpouse().getHousehold().equals(person.getHousehold()))
+							hasCouple = true;
 					
 					else
-						people.remove(person);
+						peopleToRemove.add(person);
 				}
 			}
 			
+			people.removeAll(peopleToRemove);
+			household.setPeople(people.stream().collect(Collectors.toSet()));
 			return hasCouple && hasChildrenBelow18;
 		}).collect(Collectors.toList());
 	}
@@ -134,18 +142,22 @@ public class HouseholdService {
 	// Elder Bonus
 	private List<Household> getEB() {
 		return listAllHousehold().stream().filter(household -> {
-			Set<Person> people = household.getPeople();
+			List<Person> people = household.getPeople().stream().collect(Collectors.toList());
+			List<Person> peopleToRemove = new ArrayList<Person> ();
+			
 			boolean hasElderAbove50 = false;
 			
 			for(Person person: people) {
 				
 				if(DateUtil.calculateAge(person.getBirthDate(), LocalDate.now()) > 50)
 					hasElderAbove50 = true;
-					
+				
 				else
-					people.remove(person);
+					peopleToRemove.add(person);
 			}
 			
+			people.removeAll(peopleToRemove);
+			household.setPeople(people.stream().collect(Collectors.toSet()));
 			return hasElderAbove50;
 		}).collect(Collectors.toList());
 	}
@@ -153,7 +165,9 @@ public class HouseholdService {
 	// Baby Sunshine Grant
 	private List<Household> getBSG() {
 		return listAllHousehold().stream().filter(household -> {
-			Set<Person> people = household.getPeople();
+			List<Person> people = household.getPeople().stream().collect(Collectors.toList());
+			List<Person> peopleToRemove = new ArrayList<Person> ();
+			
 			boolean hasChildrenYoungerThan5 = false;
 			
 			for(Person person: people) {
@@ -162,9 +176,11 @@ public class HouseholdService {
 					hasChildrenYoungerThan5 = true;
 					
 				else
-					people.remove(person);
+					peopleToRemove.add(person);
 			}
 			
+			people.removeAll(peopleToRemove);
+			household.setPeople(people.stream().collect(Collectors.toSet()));
 			return hasChildrenYoungerThan5;
 		}).collect(Collectors.toList());
 	}
@@ -172,7 +188,8 @@ public class HouseholdService {
 	// YOLO GST Grant
 	private List<Household> getYGSTG() {
 		return listAllHousehold().stream().filter(household -> {
-			Set<Person> people = household.getPeople();
+			List<Person> people = household.getPeople().stream().collect(Collectors.toList());
+			
 			int totalIncome = 0;
 			
 			for(Person person: people) {

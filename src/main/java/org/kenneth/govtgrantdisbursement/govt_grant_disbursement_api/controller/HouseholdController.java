@@ -38,7 +38,7 @@ public class HouseholdController {
 		}
 	}
 	
-	@GetMapping("/households/grants/{id}")
+	@GetMapping("/households/grants/{option}")
 	public List<Household> getGrants(@PathVariable int option) {
 		return householdService.getGrantDisbursement(option);
 	}

@@ -1,7 +1,6 @@
 package org.kenneth.govtgrantdisbursement.govt_grant_disbursement_api;
 
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.runner.RunWith;
 import org.kenneth.govtgrantdisbursement.govt_grant_disbursement_api.model.Household;
 import org.kenneth.govtgrantdisbursement.govt_grant_disbursement_api.model.Person;
@@ -29,7 +28,7 @@ import java.util.NoSuchElementException;
 public class HouseholdIntegrationTest {
 	
 	@Autowired
-    private MockMvc mvc;
+	private MockMvc mvc;
 	
 	@Autowired
 	private ObjectMapper objectMapper;
@@ -40,11 +39,7 @@ public class HouseholdIntegrationTest {
 	private static long householdId = 0;
 	private static long personId = 0;
 	
-	@BeforeAll
-	public void checkCondition() throws Exception {
-		assert householdService.listAllHousehold().size() == 0 : "Table households should be deleted or empty before run";
-		assert householdService.listAllPeople().size() == 0 : "Table people should be deleted or empty before run";
-	}
+	// Ensure table 'households' and 'people' are empty/deleted before running
 	
 	@Test
 	public void createHouseholdTest() throws Exception {
@@ -64,7 +59,7 @@ public class HouseholdIntegrationTest {
 	public void showHouseholdTest() throws Exception {
 		Household household = new Household("Condominium");
 		householdId++;
-		Person person = new Person("Andrew Yeo", "M", "Single", "Employed", 40000, LocalDate.of(1992, 7, 12), null, household);
+		Person person = new Person("Andrew Yeo", "Male", "Single", "Employed", 40000, LocalDate.of(1992, 7, 12), null, household);
 		personId++;
 		household.getPeople().add(person);
 		householdService.save(household);
@@ -88,7 +83,7 @@ public class HouseholdIntegrationTest {
 	public void deleteHouseholdTest() throws Exception {
 		Household household = new Household("Landed");
 		householdId++;
-		Person person = new Person("Terrence Tan", "M", "Single", "Employed", 43000, LocalDate.of(1989, 4, 9), null, household);
+		Person person = new Person("Terrence Tan", "Male", "Single", "Employed", 43000, LocalDate.of(1989, 4, 9), null, household);
 		personId++;
 		household.getPeople().add(person);
 		householdService.save(household);
@@ -115,7 +110,7 @@ public class HouseholdIntegrationTest {
 		householdId++;
 		householdService.save(household);
 		
-		Person person = new Person("Terrence Tan", "M", "Single", "Employed", 43000, LocalDate.of(1989, 4, 9), null, household);
+		Person person = new Person("Terrence Tan", "Male", "Single", "Employed", 43000, LocalDate.of(1989, 4, 9), null, household);
 		personId++;
 		
 		this.mvc.perform(MockMvcRequestBuilders.post("/households/" + householdId)
@@ -130,7 +125,7 @@ public class HouseholdIntegrationTest {
 	public void removePersonFromHouseholdTest() throws Exception {
 		Household household = new Household("Landed");
 		householdId++;
-		Person person = new Person("Louis Low", "M", "Single", "Employed", 27000, LocalDate.of(1993, 8, 17), null, household);
+		Person person = new Person("Louis Low", "Male", "Single", "Employed", 27000, LocalDate.of(1993, 8, 17), null, household);
 		personId++;
 		household.getPeople().add(person);
 		householdService.save(household);
