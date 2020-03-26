@@ -1,7 +1,6 @@
 package org.kenneth.govtgrantdisbursement.govt_grant_disbursement_api.model;
 
-import java.util.Date;
-
+import java.time.LocalDate;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -43,7 +42,7 @@ public class Person {
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="birth_date")
-	private Date birthDate;
+	private LocalDate birthDate;
 	
 	@OneToOne(cascade=CascadeType.ALL)
 	private Person spouse;
@@ -56,7 +55,7 @@ public class Person {
 	public Person() {
 	}
 	public Person(String name, String gender, String maritalStatus, String occupationType, int annualIncome,
-			Date birthDate, Person spouse, Household household) {
+			LocalDate birthDate, Person spouse, Household household) {
 		this.name = name;
 		this.gender = gender;
 		this.maritalStatus = maritalStatus;
@@ -103,10 +102,10 @@ public class Person {
 	public void setAnnualIncome(int annualIncome) {
 		this.annualIncome = annualIncome;
 	}
-	public Date getBirthDate() {
+	public LocalDate getBirthDate() {
 		return birthDate;
 	}
-	public void setBirthDate(Date birthDate) {
+	public void setBirthDate(LocalDate birthDate) {
 		this.birthDate = birthDate;
 	}
 	public Person getSpouse() {

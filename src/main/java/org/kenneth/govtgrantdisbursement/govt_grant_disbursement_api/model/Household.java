@@ -55,4 +55,17 @@ public class Household {
 	public void setPeople(Set<Person> people) {
 		this.people = people;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == this)
+			return true;
+		
+		if(obj == null || obj.getClass() != this.getClass())
+			return false;
+		
+		Household household = (Household) obj;
+		
+		return id.equals(household.getId()) && housingType.equals(household.getHousingType()) && people.equals(household.getPeople());
+	}
 }

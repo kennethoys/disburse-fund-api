@@ -5,7 +5,7 @@ import java.util.NoSuchElementException;
 
 import org.kenneth.govtgrantdisbursement.govt_grant_disbursement_api.model.Household;
 import org.kenneth.govtgrantdisbursement.govt_grant_disbursement_api.model.Person;
-import org.kenneth.govtgrantdisbursement.govt_grant_disbursement_api.service.IHouseholdService;
+import org.kenneth.govtgrantdisbursement.govt_grant_disbursement_api.service.HouseholdService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class HouseholdController {
 	
 	@Autowired
-	private IHouseholdService householdService;
+	private HouseholdService householdService;
 	
 	@GetMapping("/households")
 	public List<Household> listHouseholds() {
